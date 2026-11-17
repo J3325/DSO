@@ -1,0 +1,45 @@
+services:
+  frontend:
+    build: ./frontend
+    container_name: erp-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - erp-network
+
+  backend:
+    build: ./backend
+    container_name: erp-backend
+    ports:
+      - "8000:80"
+    environment:
+      DB_HOST: db
+      DB_DATABASE: erp_db
+      DB_USERNAME: erp_user
+      DB_PASSWORD: erp_pass
+    depends_on:
+      - db
+    networks:
+      - erp-network
+
+  db:
+    image: mysql:8.0
+    container_name: erp-database
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: erp_db
+      MYSQL_USER: erp_user
+      MYSQL_PASSWORD: erp_pass
+    volumes:
+      - erp-db-data:/var/lib/mysql
+    networks:
+      - erp-network
+
+volumes:
+  erp-db-data:
+
+networks:
+  erp-network:
+    driver: bridge
