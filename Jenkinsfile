@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        label 'linux-agent'
+    }
 
     environment {
         PROJECT_NAME = "DSO"
@@ -10,6 +12,7 @@ pipeline {
         stage('1. Inspect Workspace') {
             steps {
                 echo "Memulai pipeline untuk ${PROJECT_NAME} di environment ${APP_ENV}..."
+                sh 'hostname'
                 sh 'ls -la'
                 sh 'git log -1 --oneline'
             }
